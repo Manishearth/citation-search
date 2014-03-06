@@ -44,11 +44,11 @@
 <br/>
 <table>
 	<tr>
-		<td valign="top">
+		<td valign="top" id="resultscell" width="100%">
 			<div id="results">
 			</div>
 		</td>
-		<td valign="top" width=50%>
+		<td valign="top" id="previewcell" width="100%" style="display:none">
 			<div id="loading-results"></div>
 			<div id="article-display"></div>
 		</td>
@@ -70,7 +70,9 @@ function renderOptionalLink(href, text) {
 		return '<span class="inactive">' + text + '</span> ';
 	}
 }
-
+function citeBack(){
+	$("#resultscell").show();$("#previewcell").hide();
+}
 function loadInFrame(url) {
 	// decide whether to sandbox depending on whether it's a PDF
 	if(url.indexOf('pdf') == -1) {
@@ -78,8 +80,9 @@ function loadInFrame(url) {
 	} else {
 		$("#iframe").removeAttr('sandbox');
 	}
-	$('#loading-results').html('Loading ... <a href="' + url + '">' + url + '</a>');
+	$('#loading-results').html('<a id=backbutton onclick="citeBack()" href="javascript:void(0)">Back</a>&nbsp;|&nbsp;Loading ... <a href="' + url + '">' + url + '</a>');
 	$("#iframe").attr('src', url);
+
 }
 
 function callback(response) {
@@ -129,6 +132,7 @@ function selectResult(result) {
 		loadInFrame(result.best);
 	}
 	parent.postMessage(json, "*");
+	$("#resultscell").hide();$("#previewcell").show();
 }
 
 function getURLParameter(name) {
